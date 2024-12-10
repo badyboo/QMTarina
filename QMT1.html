@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Game</title>
+    <style>
+        .box {
+            width: 120px;
+            height: 150px;
+            margin: 10px;
+            border: 2px solid #000;
+            display: inline-block;
+            text-align: center;
+            vertical-align: top;
+            padding-top: 10px;
+        }
+        .drag-item {
+            width: 100px;
+            height: 50px;
+            background-color: #f0ad4e;
+            margin: 5px;
+            cursor: move;
+            text-align: center;
+            line-height: 50px;
+        }
+        #food-items {
+            margin-left: 17rem;
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #f0ad4e;
+            border-radius: 5px;
+            border-width: 1px;
+            align-items: center;
+        }
+
+        .button a {
+            text-decoration: none;
+            color: #000;
+            align-items: center;
+        }
+
+        
+    </style>
+</head>
+<body style="font-family: 'Courier New', Courier, monospace; text-decoration: none; padding-top: 5rem; text-align: center;">
+    <h1>Drag and Drop Foods into the Correct Group</h1>
+    <div id="food-items">
+        <div class="drag-item" draggable="true" id="apple">Apple</div>
+        <div class="drag-item" draggable="true" id="bread">Bread</div>
+        <div class="drag-item" draggable="true" id="carrot">Carrot</div>
+        <div class="drag-item" draggable="true" id="chicken">Chicken</div>
+        <div class="drag-item" draggable="true" id="banana">Banana</div>
+        <div class="drag-item" draggable="true" id="rice">Rice</div>
+        <div class="drag-item" draggable="true" id="spinach">Spinach</div>
+        <div class="drag-item" draggable="true" id="fish">Fish</div>
+    </div>
+    <div>
+        <div class="box" id="fruits">Fruits</div>
+        <div class="box" id="grains">Grains</div>
+        <div class="box" id="vegetables">Vegetables</div>
+        <div class="box" id="proteins">Proteins</div>
+    </div>
+
+    <script>
+        const items = document.querySelectorAll('.drag-item');
+        const boxes = document.querySelectorAll('.box');
+
+        items.forEach(item => {
+            item.addEventListener('dragstart', dragStart);
+        });
+
+        boxes.forEach(box => {
+            box.addEventListener('dragover', dragOver);
+            box.addEventListener('drop', drop);
+        });
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text/plain');
+            const draggable = document.getElementById(id);
+
+            // Check if the drop target is a valid box
+            if (e.target.classList.contains('box')) {
+                e.target.appendChild(draggable);
+            }
+        }
+    </script>
+    <br><br>
+    <!--<button><a href="QMT1.html">Previous</a></button>-->
+    <button class="button"><a href="QMT2.html">Next</a></button>
+</body>
+</html>

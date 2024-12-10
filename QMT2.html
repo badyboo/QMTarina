@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Balanced Lunch</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 300px;
+            margin: 10px;
+            border: 2px solid #000;
+            display: inline-block;
+            vertical-align: top;
+            text-align: center;
+            padding-top: 10px;
+        }
+        .drag-item {
+            width: 150px;
+            height: 50px;
+            background-color: #f0ad4e;
+            margin: 5px;
+            cursor: move;
+            text-align: center;
+            line-height: 50px;
+        }
+        #food-items {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            margin-left: 20rem;
+        }
+        #balanced-lunch {
+            background-color: #dff0d8;
+        }
+
+        .button {
+            background-color: #f0ad4e;
+            border-radius: 5px;
+            border-width: 1px;
+            align-items: center;
+        }
+
+        .button a {
+            text-decoration: none;
+            color: #000;
+            align-items: center;
+        }
+    </style>
+</head>
+<body style="font-family: 'Courier New', Courier, monospace; text-decoration: none; padding-top: 5rem; text-align: center;">
+    <h1>Drag Foods to Create a Balanced Lunch</h1>
+    <p>Select only the healthy foods to create a balanced lunch!</p>
+    <div id="food-items">
+        <div class="drag-item" draggable="true" id="rice">Rice</div>
+        <div class="drag-item" draggable="true" id="fish">Fish</div>
+        <div class="drag-item" draggable="true" id="vegetables">Vegetables</div>
+        <div class="drag-item" draggable="true" id="candy">Candy</div>
+        <div class="drag-item" draggable="true" id="cocacola">Coca-Cola</div>
+    </div>
+    <div>
+        <div class="box" id="balanced-lunch">Balanced Lunch</div>
+    </div>
+    <div>
+        <button id="check-button">Check Answers</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const items = document.querySelectorAll('.drag-item');
+        const foodItemsContainer = document.getElementById('food-items');
+        const balancedLunch = document.getElementById('balanced-lunch');
+        const checkButton = document.getElementById('check-button');
+        const result = document.getElementById('result');
+
+        const correctAnswers = ['rice', 'fish', 'vegetables'];
+        const incorrectAnswers = ['candy', 'cocacola'];
+
+        items.forEach(item => {
+            item.addEventListener('dragstart', dragStart);
+        });
+
+        balancedLunch.addEventListener('dragover', dragOver);
+        balancedLunch.addEventListener('drop', drop);
+
+        function dragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.id);
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text/plain');
+            const draggable = document.getElementById(id);
+
+            // Ensure the item is not already in the box
+            if (!balancedLunch.contains(draggable)) {
+                balancedLunch.appendChild(draggable);
+            }
+        }
+
+        checkButton.addEventListener('click', () => {
+            const selectedItems = Array.from(balancedLunch.children).map(item => item.id);
+            const hasCorrectAnswers = correctAnswers.every(answer => selectedItems.includes(answer));
+            const hasWrongAnswers = incorrectAnswers.some(answer => selectedItems.includes(answer));
+
+            if (hasCorrectAnswers && !hasWrongAnswers) {
+                result.textContent = "Great job! You created a balanced lunch!";
+                result.style.color = "green";
+            } else {
+                result.textContent = "Oops! Wrong answer. Try again!";
+                result.style.color = "red";
+
+                // Restart the game by resetting items
+                resetGame();
+            }
+        });
+
+        function resetGame() {
+            // Move all items back to the original container
+            Array.from(balancedLunch.children).forEach(item => {
+                foodItemsContainer.appendChild(item);
+            });
+            result.textContent = ""; // Clear the feedback message
+        }
+    </script>
+    <br><br>
+    <button class="button"><a href="QMT1.html">Previous</a></button>
+    <button class="button"><a href="QMT2.html">Next</a></button>
+</body>
+</html>
